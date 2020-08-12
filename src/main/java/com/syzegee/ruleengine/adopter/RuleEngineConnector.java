@@ -1,6 +1,6 @@
 package com.syzegee.ruleengine.adopter;
 
-import com.syzegee.ruleengine.domain.*;
+import com.syzegee.ruleengine.model.*;
 import com.syzegee.ruleengine.entity.SzProjectRules;
 import com.syzegee.ruleengine.entity.SzRuleDetails;
 import com.syzegee.ruleengine.entity.SzRuleProject;

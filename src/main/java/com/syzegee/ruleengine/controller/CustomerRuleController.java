@@ -1,6 +1,6 @@
 package com.syzegee.ruleengine.controller;
 
-import com.syzegee.ruleengine.domain.*;
+import com.syzegee.ruleengine.model.*;
 import lombok.extern.slf4j.Slf4j;
 import com.syzegee.ruleengine.service.CustomerRuleService;
 import org.springframework.beans.factory.annotation.Autowired;
