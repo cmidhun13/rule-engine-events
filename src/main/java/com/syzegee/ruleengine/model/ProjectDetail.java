@@ -1,4 +1,4 @@
-package com.syzegee.ruleengine.domain;
+package com.syzegee.ruleengine.model;
 
 import lombok.Builder;
 import lombok.Data;

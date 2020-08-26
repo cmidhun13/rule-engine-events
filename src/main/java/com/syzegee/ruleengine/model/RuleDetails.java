@@ -1,10 +1,9 @@
-package com.syzegee.ruleengine.domain;
+package com.syzegee.ruleengine.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.Tolerate;
 
 import java.io.Serializable;
 import java.util.List;

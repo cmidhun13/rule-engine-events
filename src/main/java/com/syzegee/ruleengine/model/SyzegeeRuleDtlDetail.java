@@ -1,4 +1,4 @@
-package com.syzegee.ruleengine.domain;
+package com.syzegee.ruleengine.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,11 +12,12 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SyzegeeProjectRulesDetail implements Serializable {
-    private long projectRuleId;
-    private long projectId;
+public class SyzegeeRuleDtlDetail  implements Serializable {
+
+    private long ruleDetailId;
     private long ruleId;
-    private String ruleValue;
+    private String ruleDetailCode;
+    private String ruleDetailValue;
     private Boolean isActive;
     private String createdBy;
     private Date createdDate;
