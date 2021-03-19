@@ -21,3 +21,9 @@ spring:
             non_contextual_creation: true
     show-sql: true
 
+#Spring actuator configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
