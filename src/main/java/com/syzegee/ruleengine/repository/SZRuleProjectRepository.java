@@ -23,6 +23,11 @@ public interface SZRuleProjectRepository extends JpaRepository<SzRuleProject, Lo
     @Query(" from SzRuleProject where isActive=true and customerId=:customerId")
     public SzRuleProject getSzRuleProjectByCustomerId(@Param("customerId") String customerId);
 
+    @Query(" from SzRuleProject where projectCode=:projectCode and projectName=:projectName and customerId=:customerId")
+    public List<SzRuleProject> getSzRuleProjectByCustIdProjCodeNProjName(@Param("projectCode") String projectCode,
+                                                                   @Param("projectName") String projectName,
+                                                                   @Param("customerId") String customerId);
+
     @Query(" from SzRuleProject where isActive=true and projectName=:projectName")
     public SzRuleProject getSzRuleProjectByProjectName(@Param("projectName") String projectName);
 

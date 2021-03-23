@@ -1,5 +1,6 @@
 package com.syzegee.ruleengine.adopter;
 
+import com.syzegee.ruleengine.exception.SzRuleEngineException;
 import com.syzegee.ruleengine.model.*;
 import com.syzegee.ruleengine.entity.SzProjectRules;
 import com.syzegee.ruleengine.entity.SzRuleDetails;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.syzegee.ruleengine.repository.SZRuleRepository;
 import com.syzegee.ruleengine.entity.SzRule;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import org.apache.logging.log4j.LogManager;
@@ -18,6 +20,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -49,7 +52,7 @@ public class RuleEngineConnector {
     public SzRule createSyzegeeRule(SyzegeeRuleDetail ruleDetail){
         SzRule szRule=SzRule.builder().ruleCode(ruleDetail.getRuleCode()).ruleName(ruleDetail.getRuleName())
         .ruleDesc(ruleDetail.getRuleDesc()).isActive(Boolean.TRUE).createdBy(ruleDetail.getCreatedBy())
-        .createdDate(ruleDetail.getCreatedDate()).build();
+        .createdDate(null!=ruleDetail.getCreatedDate()?ruleDetail.getCreatedDate():new Date()).build();
         log.info("SyzegeeRule name is "+ ruleDetail.getRuleName());
         SzRule ruleEntity = szRuleRepository.save(szRule);
 
@@ -101,7 +104,8 @@ public class RuleEngineConnector {
     public SzRuleDetails createSyzegeeRuleDetail(SyzegeeRuleDtlDetail szRuleDetails, SzRule szRule){
         SzRuleDetails ruleDetail = SzRuleDetails.builder().ruleId(szRule).ruleDetailCode(szRuleDetails.getRuleDetailCode())
                 .ruleDetailValue(szRuleDetails.getRuleDetailValue()).isActive(Boolean.TRUE)
-                .createdBy(szRuleDetails.getCreatedBy()).createdDate(szRuleDetails.getCreatedDate()).build();
+                .createdBy(szRuleDetails.getCreatedBy())
+                .createdDate(null!=szRuleDetails.getCreatedDate()?szRuleDetails.getCreatedDate():new Date()).build();
         log.info(" SyzegeeRuleDetail Value Is "+ szRuleDetails.getRuleDetailValue());
         SzRuleDetails ruleDetailEntity= szRuleDetailsRepository.save(ruleDetail);
         return ruleDetailEntity;
@@ -160,16 +164,28 @@ public class RuleEngineConnector {
      */
     public SzRuleProject createRuleProject(RuleProjectDetail szRuleProject){
         SzRuleProject ruleProjectEntity=null;
-        SzRuleProject ruleProject =  SzRuleProject.builder().customerId(szRuleProject.getCustomerId()).
+        List<SzRuleProject> szRuleProjectList = szRuleProjectRepository.getSzRuleProjectByCustIdProjCodeNProjName(
+                szRuleProject.getProjectCode(),szRuleProject.getProjectName(),szRuleProject.getCustomerId()
+        );
+        if(Objects.nonNull(szRuleProjectList) && !szRuleProjectList.isEmpty())
+        {
+            //throw new SzRuleEngineException(HttpStatus.BAD_REQUEST,400,"Project already exists");
+            return szRuleProjectList.get(0);
+        }
+        else
+        {
+            SzRuleProject ruleProject =  SzRuleProject.builder().customerId(szRuleProject.getCustomerId()).
                     projectCode(szRuleProject.getProjectCode()).projectName(szRuleProject.getProjectName())
-                   .isActive(Boolean.TRUE).projectDesc(szRuleProject.getProjectDesc()).createdBy(szRuleProject.getCreatedBy())
-                   .createdDate(szRuleProject.getCreatedDate()).build();
-             log.info("SyzegeeRuleProject Name Is "+ szRuleProject.getProjectName());
-             ruleProjectEntity = szRuleProjectRepository.save(ruleProject);
-             if(szRuleProject.getDefaultRuleName()!=null){
-                 copyDefaultRules(ruleProjectEntity,szRuleProject.getDefaultRuleName());
-             }
-        return ruleProjectEntity;
+                    .isActive(Boolean.TRUE).projectDesc(szRuleProject.getProjectDesc()).createdBy(szRuleProject.getCreatedBy())
+                    .createdDate(szRuleProject.getCreatedDate()).build();
+            log.info("SyzegeeRuleProject Name Is "+ szRuleProject.getProjectName());
+            ruleProjectEntity = szRuleProjectRepository.save(ruleProject);
+            if(szRuleProject.getDefaultRuleName()!=null){
+                copyDefaultRules(ruleProjectEntity,szRuleProject.getDefaultRuleName());
+            }
+            return ruleProjectEntity;
+        }
+
     }
 
     /**
@@ -268,7 +284,7 @@ public class RuleEngineConnector {
        System.out.println("szRuleProject "+szRuleProject.getProjectId());
         SzProjectRules projectRule=  SzProjectRules.builder().projectId(szRuleProject).ruleId(szRule)
                 .ruleValue(szProjectRules.getRuleValue()).isActive(Boolean.TRUE).createdBy(szProjectRules.getCreatedBy())
-                .createdDate(szProjectRules.getCreatedDate()).build();
+                .createdDate(null!=szProjectRules.getCreatedDate()?szProjectRules.getCreatedDate():new Date()).build();
         log.info("SyzegeeProjectRules Value Is "+szProjectRules.getRuleValue());
          SzProjectRules projectRuleEntity = szProjectRulesRepository.save(projectRule);
         return projectRuleEntity;

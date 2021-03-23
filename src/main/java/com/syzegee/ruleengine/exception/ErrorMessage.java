@@ -1,10 +1,12 @@
 package com.syzegee.ruleengine.exception;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.http.HttpStatus;
 
 /**
  * Ram Prasad
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ErrorMessage {
 
     private HttpStatus status;

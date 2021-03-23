@@ -150,7 +150,7 @@ public class CustomerRuleService {
         }
 
         ResponseDetails responseDetails=ResponseDetails.builder().projectId(ruleProject.getProjectId()).
-                correlationId("100"+ruleProject.getProjectId()).message(ruleProject.getProjectName()+"Created Successfully").build();
+                correlationId("100"+ruleProject.getProjectId()).message(ruleProject.getProjectName()+" : Created Successfully").build();
         return responseDetails;
     }
 

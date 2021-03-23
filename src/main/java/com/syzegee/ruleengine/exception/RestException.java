@@ -43,4 +43,13 @@ public class RestException extends ResponseEntityExceptionHandler {
                 exception.getMessage(), exception.getDeveloperMessage());
         return new ResponseEntity<>(errorMessage, errorMessage.getStatus());
     }
+
+    @ExceptionHandler(SzRuleEngineException.class)
+    public final ResponseEntity<ErrorMessage> ruleEngineException(SzRuleEngineException exception,
+                                                                          WebRequest request) {
+        ErrorMessage errorMessage
+                = new ErrorMessage(exception.getStatus(), exception.getCode(),
+                exception.getMessage());
+        return new ResponseEntity<>(errorMessage, errorMessage.getStatus());
+    }
 }
