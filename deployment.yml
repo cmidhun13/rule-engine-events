@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rule-engine-events
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rule-engine-events
+  template:
+    metadata:
+      labels:
+        app: rule-engine-events
+    spec:
+      containers:
+        - image: cmidhun/rule-engine-events:0.0.1-SNAPSHOT
+          name: rule-engine-events
+          imagePullPolicy: Always
+          resources:
+            requests:
+              memory: "50Mi"
+              cpu: "500m"
+            limits:
+              memory: "500Mi"
+              cpu: "2000m"
+          ports:
+            - containerPort: 8091
